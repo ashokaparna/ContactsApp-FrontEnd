@@ -1,0 +1,8 @@
+@import "mixins.scss";
+/* Crop button with image */
+.add-contact {
+  @include place-image('addcontact-icon.png');
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+}
