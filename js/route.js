@@ -5,7 +5,7 @@ import 'rxjs/Observable/of';
 fetchContacts();
 let rxjs = require('rxjs');
 let addContactButton = document.querySelector(".add-contact");
-rxjs.fromEvent(addContactButton, 'click').subscribe(function (x) {
+rxjs.fromEvent(addContactButton, 'click').subscribe(function () {
     showAddContactView();
 });
 
@@ -74,13 +74,13 @@ function showDetails(response_json) {
 }
 
 function clearContacts() {
-    let body = document.getElementsByTagName("body")[0];
+    let div = document.querySelector(".contact-list");
     let table = document.getElementsByTagName("table")[0];
-    body.removeChild(table);
+    div.removeChild(table);
 }
 
 function populateOutput(json_array) {
-    let body = document.getElementsByTagName("body")[0];
+    let div = document.querySelector(".contact-list");
     let tbl = document.createElement("table");
     let tblBody = document.createElement("tbody");
     for(let i = 0; i < json_array.length; i++){
@@ -113,7 +113,7 @@ function populateOutput(json_array) {
     // put the <tbody> in the <table>
     tbl.appendChild(tblBody);
     // appends <table> into <body>
-    body.appendChild(tbl);
+    div.appendChild(tbl);
     // sets the border attribute of tbl to 2;
     tbl.setAttribute("border", "2");
 }
