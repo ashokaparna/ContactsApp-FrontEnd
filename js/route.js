@@ -15,13 +15,11 @@ rxjs.fromEvent(submitContactButton, 'click').subscribe(function () {
 });
 
 
-
 let createContact = function createContact(){
     let firstname = document.querySelector(".firstname").value;
     let lastname = document.querySelector(".lastname").value;
     let phoneNumber = document.querySelector(".phone-number").value;
     let email = document.querySelector(".email").value;
-
     fetch('http://localhost:3000/contacts', {
         mode: "cors",
         headers: { "Content-Type": "application/json"},
@@ -56,12 +54,23 @@ function fetchContactById(_id){
         headers: { "Content-Type": "application/json"},
         method: 'GET'
     })
-        .then(response => showDetails(response))
-        .then(data => console.log(JSON.stringify(data)));
+        .then(response => response.json().then(json => showDetails(json)))
+        .then(data => function(){
+            console.log("From THEN");
+            console.log(data);
+        });
 }
 
-function showDetails(response) {
-    console.log(response.json());
+
+function showDetails(response_json) {
+    console.log(response_json);
+    let contactDetailsDiv = document.querySelector(".contact-details");
+    let firstName = response_json.firstname;
+    let secondName = response_json.lastname;
+    let phoneno = response_json.phonenumber;
+    let email = response_json.email;
+    contactDetailsDiv.innerHTML = '<span>'+firstName + " " + secondName+'<br />'+ phoneno + '<br />'+ email+'</span>';
+
 }
 
 function clearContacts() {
