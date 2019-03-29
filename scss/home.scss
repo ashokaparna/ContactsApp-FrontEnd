@@ -1,13 +1,13 @@
 @import "mixins.scss";
 /* Crop button with image */
 .add-contact {
-  @include place-image('addcontact-icon.png');
+  @include place-image('plus_icon.jpeg');
   width: 50px;
   height: 50px;
   background-size: contain;
   margin-top: 1px;
   margin-right: 2px;
-  position:absolute;
+  position: absolute;
   top:20px;
   right:0;
 }
@@ -27,8 +27,44 @@
 
 .heading {
  text-align: center;
+  padding-top: 30px;
 }
 
-//.addcontact-holder{
-//  float: left;
-//}
+.addcontact-holder{
+  background-color: cornflowerblue;
+  height: 100px;
+  color: white;
+
+}
+
+.view_button{
+  float: right;
+  background-color: cornflowerblue;
+}
+
+.all-tds{
+  position: relative;
+  height: 75px;
+}
+
+.cell1inside{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 100%;
+}
+
+.contact-list{
+  position: absolute;
+  width: 700px;
+}
+
+.contacts_table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contact-details{
+  float: right;
+  width: 600px;
+}
