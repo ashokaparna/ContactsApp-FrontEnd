@@ -1,3 +1,3 @@
 import './../scss/main.scss';
-import './../js/route.js';
+import '../js/app.js';
 import 'rxjs/Observable/of';
