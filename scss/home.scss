@@ -1,5 +1,5 @@
 @import "mixins.scss";
-/* Crop button with image */
+/* Add contact button with image */
 .add-contact {
   @include place-image('plus_icon.jpeg');
   width: 50px;
@@ -12,10 +12,13 @@
   right:0;
 }
 
+/* styling for the add contact image */
  button.add-contact {
    margin-top: 25px;
    margin-right: 250px;
  }
+
+ /*styling for submit button*/
 .submit-button{
   width: 200px;
   height: 50px;
@@ -51,6 +54,14 @@
   width: 700px;
 }
 
+/*
+For the following the table related style elements
+we have border radius set for styling, overflow is set
+so that the filling color would not overflow.
+tr, td all have their own separate settings to achieve the desired
+effect on UI
+*/
+
 table.contacts_table{
   width: 100%;
   border: 1px solid $contact-theme;
@@ -84,6 +95,8 @@ table.contacts_table tr:hover {
   cursor: pointer;
 }
 
+/*Styling for the div that is responsible for showing the contact card
+when you click on a name in the LH side of the UI*/
 .contact-details{
   float: right;
   width: 600px;
@@ -95,6 +108,9 @@ table.contacts_table tr:hover {
   padding-top: 50px;
   padding-bottom: 100px;
 }
+
+/*The following two styles are set so that the input fields are
+aligned and justified on top of the contact list*/
 
 .contact-form{
   width: 700px;

@@ -2,22 +2,37 @@
 import {fromEvent} from "rxjs";
 
 "use strict";
-
+/*
+* On window load (program start up we need the contacts that are already present
+* to be shown. At the same time the add contact form is hidden. This function adds an
+* observable on the window onload function
+* */
 fromEvent(window,'load').subscribe(function () {
     fetchContacts();
     document.querySelector(".contact-form").style.display='none';
 })
 
+/*When the add contact button is clicked we toggle the display of the div that takes
+* the details of the contact that we intend to add*/
 
 let addContactButton = document.querySelector(".add-contact");
 fromEvent(addContactButton, 'click').subscribe(function () {
     toggleAddContactView();
 });
 
+/*handler for the submit operation that saves the contact to the DB*/
 let submitContactButton = document.querySelector(".submit-button");
 fromEvent(submitContactButton, 'click').subscribe(function () {
     createContact();
 });
+
+/*The create contact function - this takes the details from the div and
+* populates the database. this also takes care of the validation that are to
+* be done on all the Ui fields that we have on the div. We have used the fetch api
+* to call the backend here and the response is handled accordingly. After the contact
+* is saved to the DB we clear the list that is already shown on the UI and re call the
+* fetch API with a getAll that repopulates the list so that we have all the contacts present
+* for the user to view*/
 
 function createContact(){
     let firstname = document.querySelector(".firstname");
@@ -73,10 +88,14 @@ function createContact(){
             .catch(error => console.error('Error:', error));
 }}
 
+/*Email validation is a bit more nuanced since it allows empty string here.
+* If the user enters anything in the field only then we validate it with a regex that
+* is shown in the code below*/
 function isValid(email, emailRegex) {
     return email==="" || email===null || email.match(emailRegex);
 }
 
+/*This endpoint fetched all the contacts from the DB*/
 function fetchContacts() {
     fetch('http://localhost:3000/contacts', {
         mode: "cors",
@@ -89,7 +108,9 @@ function fetchContacts() {
         .catch(error => console.error('Error:', error));
 }
 
-
+/*This endpoint as opposed to the previous one fetches a specific
+* contact from the backend - this is what is triggered if the user is to click
+* on a specific contact name from the list*/
 function fetchContactById(_id){
     console.log(_id);
     fetch('http://localhost:3000/contacts/' + _id, {
@@ -103,10 +124,11 @@ function fetchContactById(_id){
             console.log("From THEN");
             console.log(data);
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => alert("Contact not found, please refresh! Details: "+error.toString()));
     window.scrollTo(0, 0);
 }
 
+/*After calling the fetch we use this function to show the data on a contact card in the UI*/
 function showDetails(response_json) {
     console.log(response_json);
     let contactDetailsDiv = document.querySelector(".contact-details");
@@ -119,16 +141,21 @@ function showDetails(response_json) {
 
 }
 
+/*small hanlder to create the span that actually has the backend data for a given contact*/
 function getInnerHTML(firstName, secondName, phoneno, email) {
     return '<span class="single-contact-detail">Name:&nbsp;'+firstName + " " + secondName+'<br />Phone Number:&nbsp;'+ phoneno + '<br />Email:&nbsp;'+ email+'</span>';
 }
 
+/*small handler function that clears the contact details from the table as soon as we enter and save
+* a new contact, so that we can reload the data*/
 function clearContacts() {
     let div = document.querySelector(".contact-list");
     let table = document.getElementsByTagName("table")[0];
     div.removeChild(table);
 }
 
+/*main function that is responsible of showing the data in a tabular manner
+* on the UI*/
 function populateOutput(json_array) {
     let div = document.querySelector(".contact-list");
     let tbl = document.createElement("table");
@@ -158,6 +185,7 @@ function populateOutput(json_array) {
     tbl.setAttribute("border", "1");
 }
 
+/*this function toggles the display of the add contact div on the UI*/
 function toggleAddContactView() {
     let addContactView = document.querySelector(".contact-form");
     if (addContactView.style.display === 'block') {
@@ -172,6 +200,7 @@ function toggleAddContactView() {
     }
 }
 
+/*All field values are cleared for next use and the contact div is hidden in this function*/
 function hideAddContactView() {
     document.querySelector(".firstname").value = "";
     document.querySelector(".lastname").value = "";
@@ -181,6 +210,8 @@ function hideAddContactView() {
     addContactView.style.display = "none";
 }
 
+/*this one handles the response from an add operation that we make, and shows the error if any one the UI
+* so that the user can understand whether his operation is a success or not*/
 function handleErrors(response) {
     if (!response.ok) {
         document.querySelector(".warning-span").innerHTML='<font color="red" size="7">Oh no! Server threw an error:&nbsp;'+response.statusText+'<hr>';
