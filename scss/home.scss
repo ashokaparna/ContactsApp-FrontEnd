@@ -12,17 +12,13 @@
   right:0;
 }
 
+ button.add-contact {
+   margin-top: 25px;
+   margin-right: 250px;
+ }
 .submit-button{
   width: 100px;
   height: 20px;
-}
-
-.contact-form {
-  display: none;
-}
-
-.contact-details{
-  border: 1px solid black;
 }
 
 .heading {
@@ -37,16 +33,6 @@
 
 }
 
-.view_button{
-  float: right;
-  background-color: cornflowerblue;
-}
-
-.all-tds{
-  position: relative;
-  height: 75px;
-}
-
 .cell1inside{
   display: block;
   position: absolute;
@@ -59,9 +45,31 @@
   width: 700px;
 }
 
-.contacts_table{
+table.contacts_table{
   width: 100%;
-  border-collapse: collapse;
+  border: 1px solid skyblue;
+  border-radius: 13px;
+  border-spacing: 0;
+}
+
+table.contacts_table td {
+  border-bottom: 1px solid skyblue;
+  padding: 10px;
+  height: 45px;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+table.contacts_table tr:last-child > td {
+  border-bottom: none;
+}
+table.contacts_table tr:first-child > td {
+  border-top: none;
+}
+
+table.contacts_table tr:hover {
+  background: lightgreen !important;
+  cursor: pointer;
 }
 
 .contact-details{

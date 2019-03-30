@@ -5,12 +5,13 @@ import {fromEvent} from "rxjs";
 
 fromEvent(window,'load').subscribe(function () {
     fetchContacts();
+    document.querySelector(".contact-form").style.display='none';
 })
 
 
 let addContactButton = document.querySelector(".add-contact");
 fromEvent(addContactButton, 'click').subscribe(function () {
-    showAddContactView();
+    toggleAddContactView();
 });
 
 let submitContactButton = document.querySelector(".submit-button");
@@ -18,38 +19,50 @@ fromEvent(submitContactButton, 'click').subscribe(function () {
     createContact();
 });
 
-let createContact = function createContact(){
-    let firstname = document.querySelector(".firstname").value;
-    let lastname = document.querySelector(".lastname").value;
-    let phoneNumber = document.querySelector(".phone-number").value;
-    let email = document.querySelector(".email").value;
+function createContact(){
+    let firstname = document.querySelector(".firstname");
+    let lastname = document.querySelector(".lastname");
+    let phoneNumber = document.querySelector(".phone-number");
+    let email = document.querySelector(".email");
     let phonenoRegex = /^\d{10}$/;
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if(firstname === "" || firstname === null){
-        alert("Please enter the first name");
-        return;
-    }else if(lastname === "" || lastname === null){
-        alert("Please enter the last name");
-        return;
-    }else if(phoneNumber === "" || phoneNumber === null){
-        alert("Please enter the phone number");
-        return;
-    }else if (!(phoneNumber.match(phonenoRegex))){
-        alert("Please enter a valid phone number");
-        return;
-    }else if (!(email.match(emailRegex))) {
-        alert("Please enter a valid email");
-        return;
-    }
+    let warning_span = document.querySelector(".warning-span");
+    warning_span.innerHTML="";
+    firstname.style.removeProperty('border');
+    lastname.style.removeProperty('border');
+    phoneNumber.style.removeProperty('border');
+    email.style.removeProperty('border');
+
+    if(firstname.value === "" || firstname.value === null){
+        firstname.style.borderColor = 'red';
+        warning_span.innerHTML='<small><font color="red">First name cannot be empty</small><hr>';
+        return false;
+    }else if(lastname.value === "" || lastname.value === null){
+        lastname.style.borderColor = 'red';
+        warning_span.innerHTML='<small><font color="red">Last name cannot be empty</small><hr>';
+        return false;
+    }else if(phoneNumber.value === "" || phoneNumber.value === null){
+        phoneNumber.style.borderColor = 'red';
+        warning_span.innerHTML='<small><font color="red">Phone number cannot be empty</small><hr>';
+        return false;
+    }else if (!(phoneNumber.value.match(phonenoRegex))){
+        phoneNumber.style.borderColor = 'red';
+        warning_span.innerHTML='<small><font color="red">Phone number should be 10 digits long</small><hr>';
+        return false;
+    }else if (!(email.value.match(emailRegex))) {
+        email.style.borderColor = 'red';
+        warning_span.innerHTML='<small><font color="red">Wrong email id format</small><hr>';
+        return false;
+    }else{
     fetch('http://localhost:3000/contacts', {
         mode: "cors",
         headers: { "Content-Type": "application/json"},
         method: 'POST',
         body: JSON.stringify({
-            firstname: firstname,
-            lastname: lastname,
-            phonenumber: phoneNumber,
-            email: email
+            firstname: firstname.value,
+            lastname: lastname.value,
+            phonenumber: phoneNumber.value,
+            email: email.value
         })
     })
             .then(response => handleErrors(response))
@@ -58,7 +71,7 @@ let createContact = function createContact(){
             .then(value => clearContacts())
             .then(value => fetchContacts())
             .catch(error => console.error('Error:', error));
-}
+}}
 
 function fetchContacts() {
     fetch('http://localhost:3000/contacts', {
@@ -87,6 +100,7 @@ function fetchContactById(_id){
             console.log(data);
         })
         .catch(error => console.error('Error:', error));
+    window.scrollTo(0, 0);
 }
 
 function showDetails(response_json) {
@@ -96,8 +110,12 @@ function showDetails(response_json) {
     let secondName = response_json.lastname;
     let phoneno = response_json.phonenumber;
     let email = response_json.email;
-    contactDetailsDiv.innerHTML = '<span>'+firstName + " " + secondName+'<br />'+ phoneno + '<br />'+ email+'</span>';
+    contactDetailsDiv.innerHTML = getInnerHTML(firstName, secondName, phoneno, email);
 
+}
+
+function getInnerHTML(firstName, secondName, phoneno, email) {
+    return '<span class="single-contact-detail">Name:&nbsp;'+firstName + " " + secondName+'<br />Phone Number:&nbsp;'+ phoneno + '<br />Email:&nbsp;'+ email+'</span>';
 }
 
 function clearContacts() {
@@ -117,20 +135,13 @@ function populateOutput(json_array) {
         // node the contents of the <td>, and put the <td> at
         // the end of the table row
         let cell1 = document.createElement("td");
-        let cell1inside = document.createElement("span");
-        cell1.classList.add("all-tds");
         let cellText = document.createTextNode(json_array[i].firstname + " " + json_array[i].lastname);
-        cell1inside.appendChild(cellText);
         //cell1.appendChild(cellText);
-        let button = document.createElement("button");
-        button.innerHTML = "View";
-        button.id = json_array[i]._id;
-        button.classList.add("view_button");
-        fromEvent(button, 'click').subscribe(function () {
+        fromEvent(cell1, 'click').subscribe(function () {
             fetchContactById(json_array[i]._id);
+
         });
-        cell1.appendChild(cell1inside);
-        cell1.appendChild(button);
+        cell1.appendChild(cellText);
         row.appendChild(cell1);
         tblBody.appendChild(row);
     }
@@ -142,26 +153,30 @@ function populateOutput(json_array) {
     tbl.setAttribute("border", "2");
 }
 
-let showAddContactView = function showAddContactView() {
+function toggleAddContactView() {
     let addContactView = document.querySelector(".contact-form");
-    addContactView.style.display = "block";
-
+    if (addContactView.style.display === 'block') {
+        addContactView.style.display = 'none';
+    } else {
+        addContactView.style.display = 'block';
+    }
 }
 
-let hideAddContactView = function hideAddContactView() {
+function hideAddContactView() {
     document.querySelector(".firstname").value = "";
     document.querySelector(".lastname").value = "";
     document.querySelector(".phone-number").value = "";
     document.querySelector(".email").value = "";
     let addContactView = document.querySelector(".contact-form");
     addContactView.style.display = "none";
-
 }
 
 function handleErrors(response) {
     if (!response.ok) {
+        document.querySelector(".warning-span").innerHTML='<font color="red" size="7">Oh no! Server threw an error:&nbsp;'+response.statusText+'<hr>';
         throw Error(response.statusText);
     }
+    hideAddContactView();
     return response;
 }
 
