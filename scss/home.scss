@@ -17,8 +17,14 @@
    margin-right: 250px;
  }
 .submit-button{
-  width: 100px;
-  height: 20px;
+  width: 200px;
+  height: 50px;
+  background-color: $contact-theme;
+  border: none;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  margin-left: 250px;
 }
 
 .heading {
@@ -27,7 +33,7 @@
 }
 
 .addcontact-holder{
-  background-color: cornflowerblue;
+  background-color: $contact-theme;
   height: 100px;
   color: white;
 
@@ -47,32 +53,55 @@
 
 table.contacts_table{
   width: 100%;
-  border: 1px solid skyblue;
+  border: 1px solid $contact-theme;
   border-radius: 13px;
   border-spacing: 0;
+  overflow: hidden;
 }
 
 table.contacts_table td {
-  border-bottom: 1px solid skyblue;
+  border-bottom: 1px solid $contact-theme;
   padding: 10px;
   height: 45px;
   border-left: none;
   border-right: none;
   border-top: none;
+  font-size: 25px;
+  overflow: hidden;
 }
 table.contacts_table tr:last-child > td {
   border-bottom: none;
+  overflow: hidden;
 }
 table.contacts_table tr:first-child > td {
   border-top: none;
+  overflow: hidden;
 }
 
 table.contacts_table tr:hover {
-  background: lightgreen !important;
+  background: $contact-theme !important;
+  overflow: hidden;
   cursor: pointer;
 }
 
 .contact-details{
   float: right;
   width: 600px;
+  font-size: 25px;
+  border-radius: 5px;
+  margin-right: 55px;
+  margin-top: 200px;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 100px;
+}
+
+.contact-form{
+  width: 700px;
+  clear:both;
+}
+
+.contact-form input{
+  width: 100%;
+  clear: both;
 }

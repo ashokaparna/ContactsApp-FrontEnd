@@ -49,7 +49,7 @@ function createContact(){
         phoneNumber.style.borderColor = 'red';
         warning_span.innerHTML='<small><font color="red">Phone number should be 10 digits long</small><hr>';
         return false;
-    }else if (!(email.value.match(emailRegex))) {
+    }else if (!isValid(email.value, emailRegex)) {
         email.style.borderColor = 'red';
         warning_span.innerHTML='<small><font color="red">Wrong email id format</small><hr>';
         return false;
@@ -72,6 +72,10 @@ function createContact(){
             .then(value => fetchContacts())
             .catch(error => console.error('Error:', error));
 }}
+
+function isValid(email, emailRegex) {
+    return email==="" || email===null || email.match(emailRegex);
+}
 
 function fetchContacts() {
     fetch('http://localhost:3000/contacts', {
@@ -110,6 +114,7 @@ function showDetails(response_json) {
     let secondName = response_json.lastname;
     let phoneno = response_json.phonenumber;
     let email = response_json.email;
+    contactDetailsDiv.style.backgroundColor = "cornflowerblue";
     contactDetailsDiv.innerHTML = getInnerHTML(firstName, secondName, phoneno, email);
 
 }
@@ -150,7 +155,7 @@ function populateOutput(json_array) {
     // appends <table> into <body>
     div.appendChild(tbl);
     // sets the border attribute of tbl to 2;
-    tbl.setAttribute("border", "2");
+    tbl.setAttribute("border", "1");
 }
 
 function toggleAddContactView() {
@@ -159,6 +164,11 @@ function toggleAddContactView() {
         addContactView.style.display = 'none';
     } else {
         addContactView.style.display = 'block';
+    }
+    document.querySelector(".contact-details").style.backgroundColor = "white";
+    let single_contact_detail = document.querySelector(".single-contact-detail");
+    if (single_contact_detail !==  null && single_contact_detail !== undefined) {
+        single_contact_detail.innerHTML = '';
     }
 }
 
