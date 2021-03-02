@@ -1,4 +1,4 @@
-# ASSIGNMENT 7
+# ContactsApp
 * Contacts app to display all contacts of a person
 
 ## Project Description:
